@@ -89,6 +89,11 @@ public class ScreenController02 : MonoBehaviour
 
             pc = target.GetComponent<PuzzleController>();
 
+            if (pc == null)
+            {
+                return;
+            }
+
             if (pc.GetIsCol())
             {
                 if(pc.GetColTag().Equals("PuzzSub") || pc.GetColTag().Equals("PuzzStart"))

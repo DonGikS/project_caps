@@ -19,6 +19,12 @@ public class PuzzleController : MonoBehaviour
     private Vector2 targetPos;
 
     private AudioSource sampleSource;
+
+    private void Start()
+    {
+        Debug.Log("값가져옴");
+       
+    }
     /*
     private void OnMouseDown()
     {
@@ -42,6 +48,8 @@ public class PuzzleController : MonoBehaviour
 
     }
     */
+    //***************************************건들기전
+    /*
     private void OnCollisionEnter2D(Collision2D col)
     {
         isCol = true;
@@ -59,14 +67,32 @@ public class PuzzleController : MonoBehaviour
             sampleSource = this.gameObject.GetComponent<AudioSource>();
             sampleSource.PlayOneShot(sampleSource.clip);
         }
+    }*/
+    //************************************************************
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        isCol = true;
+        //print(col.gameObject.transform.position);
+        //Debug.Log(col.gameObject.name);
+        colTag = col.gameObject.tag;
+        if (colTag.Equals("PuzzStart") ||
+           colTag.Equals("PuzzSub"))
+        {
+            targetPos = col.gameObject.transform.position;
+            colSide = CheckCollisionSide(col);
+        }
+        else if (colTag.Equals("PlayBar"))
+        {
+            sampleSource = this.gameObject.GetComponent<AudioSource>();
+            sampleSource.PlayOneShot(sampleSource.clip);
+        }
     }
-
     private void OnCollisionExit2D(Collision2D col)
     {
         isCol = false;
         colTag = null;
     }
-
+    
     private int CheckCollisionSide(Collision2D _col)
     {
         int result = -1;
