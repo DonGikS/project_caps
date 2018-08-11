@@ -37,8 +37,6 @@ public class btnNameSave : MonoBehaviour
             PopupPanel.SetActive(false);
 
             // 화면에 있는 모든 퍼즐도 없애기
-            //GameObject.Find("ScreenController").GetComponent<ScreenController02>().deleteAllPuzz(); // 모르겠어 ㅠㅠ
-            // PuzzleData List 초기화하기
             GameObject.Find("PuzzleData").GetComponent<PuzzleData>().resetList();
 
             // 저장되었다고 안내문구

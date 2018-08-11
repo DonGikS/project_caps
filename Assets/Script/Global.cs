@@ -63,6 +63,8 @@ public static class Global
         FileStream stream = new FileStream(filePath, FileMode.Create);
         formatter.Serialize(stream, PuzzList);
         stream.Close();
+
+        PuzzList.Clear(); //초기화
     }
 
 

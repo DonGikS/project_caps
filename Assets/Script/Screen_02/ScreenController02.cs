@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ScreenController02 : MonoBehaviour
 {
+    public Camera camera;
+    
     public GameObject puzzleData;
     public GameObject tutorialCanvas;
     public float dragTreshold;
@@ -41,7 +44,7 @@ public class ScreenController02 : MonoBehaviour
 
         puzzleView = GameObject.FindGameObjectWithTag("PuzzleView");
         playView = GameObject.FindGameObjectWithTag("PlayView");
-        puzzleView.SetActive(false);
+        //puzzleView.SetActive(false);
         playView.SetActive(false);
 
         tutorialCanvas.SetActive(true);
@@ -74,7 +77,6 @@ public class ScreenController02 : MonoBehaviour
         {
             createFlag = false;
             GetRayObject();
-            //Debug.Log("cop: " + clickOriginPos);
         }
         // Mouse Left Click OFF
         else if(Input.GetMouseButtonUp(0))
@@ -108,19 +110,85 @@ public class ScreenController02 : MonoBehaviour
         // Mouse Left Drag
         else if(Input.GetMouseButton(0))
         {
-            //Debug.Log("enter");
+            // 퍼즐 새로 생성
             if (CheckTargetDrag("btnPuzzle", dragTreshold))
             {
                 isDrag = true;
                 CreatePuzzle();
             }
 
-            if (CheckTargetDrag("PuzzSub", 0))
+            // 퍼즐 옮김
+            else if (CheckTargetDrag("PuzzSub", 0))
             {
                 isDrag = true;
                 DragOnPuzzle();
             }
+
+            // 카메라 화면 옮김
+            //if (CheckTargetDrag("background", 0))
+            else if(EventSystem.current.IsPointerOverGameObject() == false)
+            {
+                isDrag = true;
+                Debug.Log("카메라 옮김");
+                CameraZoom();
+            }
         }
+    }
+
+    private void CameraZoom()
+    {
+        mouseDragPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        //worldDragPosition = Camera.main.ScreenToWorldPoint(mouseDragPosition);
+
+        if (mouseOriginPosition != mouseDragPosition)
+        {
+            float temp_x = mouseOriginPosition.x - mouseDragPosition.x;
+            float temp_y = mouseOriginPosition.y - mouseDragPosition.y;
+
+            if (Mathf.Abs(temp_x) > 10 && Mathf.Abs(temp_y) > 10)   // 상하좌우
+            {
+                float x = camera.transform.position.x + temp_x / 10.0f;
+                if (x > 30) x = 30;
+                else if (x < 0) x = 0;
+
+                float y = camera.transform.position.y + temp_y / 10.0f;
+                if (y > 0) y = 0;
+                else if (y < -4.5) y = -5;
+
+
+                camera.transform.position = new Vector3(x, y, -10);
+                mouseOriginPosition = mouseDragPosition;
+                //target.transform.position = worldDragPosition;
+            }
+            else if (Mathf.Abs(temp_x) > 10)
+            { //좌우
+
+                float x = camera.transform.position.x + temp_x / 10.0f;
+                if (x > 30) x = 30;
+                else if (x < 0) x = 0;
+
+                camera.transform.position = new Vector3(x, camera.transform.position.y, -10);
+                mouseOriginPosition = mouseDragPosition;
+            }
+            else if (Mathf.Abs(temp_y) > 10)
+            {  // 상하
+                float y = camera.transform.position.y + temp_y / 10.0f;
+                if (y > 0) y = 0;
+                else if (y < -4.5) y = -5;
+                camera.transform.position = new Vector3(camera.transform.position.x, y, -10);
+                mouseOriginPosition = mouseDragPosition;
+            }
+
+            /* 디버깅용(지우겠습니당)
+            Debug.Log("mouseOriginPosition: " + mouseOriginPosition);
+            Debug.Log("mouseDragPosition : " + mouseDragPosition);
+
+            Debug.Log("camera.transform.position");
+            Debug.Log("x" + camera.transform.position.x);
+            Debug.Log("y" + camera.transform.position.y);
+            */
+        }
+        
     }
 
     private void DragOnPuzzle()
@@ -225,6 +293,8 @@ public class ScreenController02 : MonoBehaviour
             worldOriginPosition = pos;
             mouseOriginPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
         }
+        //object 아니어도 position 얻어오기
+        mouseOriginPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
     }
 
     //

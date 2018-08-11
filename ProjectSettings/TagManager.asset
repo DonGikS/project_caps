@@ -21,6 +21,7 @@ TagManager:
   - highlightCheck
   - btnMenu
   - SampleClicked
+  - background
   layers:
   - Default
   - TransparentFX
