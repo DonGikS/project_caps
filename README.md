@@ -2,7 +2,7 @@ Puzzle Drum
 ===================
 **Team**
 -
-![kakaotalk_20180706_023947772](https://user-images.githubusercontent.com/29765871/42359115-1c363196-811b-11e8-948e-b8fda4efa16b.jpg)
+
 
 >Design : Jayong Shin, Jeonghwa Seo
 
